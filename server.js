@@ -7,29 +7,49 @@ const {
   models: { Comic, Owner, Sale },
 } = require('./db');
 
+app.get('/', async (req, res, next) => {
+  try {
+    res.send("Russel's Comic Database");
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get('/comics', async (req, res, next) => {
-  const comics = await Comic.findAll({
-    include: [{ model: Owner }],
-  });
-  res.send(comics);
+  try {
+    const comics = await Comic.findAll({
+      include: [{ model: Owner }],
+    });
+    res.send(comics);
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.get('/owners', async (req, res, next) => {
-  const owners = await Owner.findAll({
-    include: [{ model: Comic }],
-  });
-  res.send(owners);
+  try {
+    const owners = await Owner.findAll({
+      include: [{ model: Comic }],
+    });
+    res.send(owners);
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.get('/sales', async (req, res, next) => {
-  const sales = await Sale.findAll({
-    include: [
-      { model: Comic, as: 'comic' },
-      { model: Owner, as: 'seller' },
-      { model: Owner, as: 'buyer' },
-    ],
-  });
-  res.send(sales);
+  try {
+    const sales = await Sale.findAll({
+      include: [
+        { model: Comic, as: 'comic' },
+        { model: Owner, as: 'seller' },
+        { model: Owner, as: 'buyer' },
+      ],
+    });
+    res.send(sales);
+  } catch (error) {
+    next(error);
+  }
 });
 
 const init = async () => {
