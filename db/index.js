@@ -12,6 +12,12 @@ const Comic = db.define('comic', {
   issue: {
     type: DataTypes.INTEGER,
   },
+  writer: {
+    type: DataTypes.STRING,
+  },
+  artist: {
+    type: DataTypes.STRING,
+  },
 });
 
 const Owner = db.define('owner', {
