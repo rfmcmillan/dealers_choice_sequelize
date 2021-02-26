@@ -1,5 +1,7 @@
 const express = require('express');
+const { userInfo } = require('os');
 const app = express();
+const path = require('path');
 
 const {
   db,
@@ -8,6 +10,7 @@ const {
 } = require('./db');
 
 app.use(express.urlencoded({ extended: false }));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 app.use(require('method-override')('_method'));
 
@@ -20,62 +23,67 @@ app.get('/', async (req, res, next) => {
     const html = `
     <html>
       <head>
+      <link href="./assets/styles.css" rel="stylesheet">
       </head>
       <body>
         <h1>Russel's Comic Database</h1>
-        <div>
-          <h3>Enter a New Comic Here</h3>
-          <form method="POST" action="/comics">
-            <label>Title:</label>
-            <input name="title"></input>
-            <br>
-            <label>Issue #:</label>
-            <input type="number" name="issue"></input>
-            <br>
-            <label>Owner</label>
-            <input name="ownerName"></input>
-            <br>
-            <button>Submit</button>
-          </form>
-        </div>
-        <div>
-          <h3>
-            Owners
-          </h3>
-          <ul>
-            ${owners
-              .map((owner) => {
-                return `
-                <li>
-                  ${owner.name}
-                  <ul>
-                    ${owner.comics
-                      .map((comic) => {
-                        return `
-                      <li>${comic.title} #${comic.issue}</li>
-                      `;
-                      })
-                      .join('')}
-                  </ul>
-                </li>
-              `;
-              })
-              .join('')}
-          </ul>
-        </div>
-        <div>
-          <h3>Comics</h3>
-          <ul>
-            ${comics
-              .map((comic) => {
-                return `
-                <li>
-                  ${comic.title} #${comic.issue}
-                </li>
-              `;
-              })
-              .join('')}
-          </ul>
+        <div id="container">
+          <div class="item">
+            <h3>Enter a New Comic Here</h3>
+            <form id="container-form" method="POST" action="/comics">
+              <label>Title:</label>
+              <input name="title"></input>
+              <br>
+              <label>Issue #:</label>
+              <input type="number" name="issue"></input>
+              <br>
+              <label>Owner:</label>
+              <input name="ownerName"></input>
+              <br>
+              <button>Submit</button>
+            </form>
+          </div>
+          <div class="item">
+            <h3>
+              <a href="/owners">Owners</a>
+            </h3>
+            <ul>
+              ${owners
+                .map((owner) => {
+                  return `
+                  <li>
+                    ${owner.name}
+                    <ul>
+                      ${owner.comics
+                        .map((comic) => {
+                          return `
+                        <li>${comic.title} #${comic.issue}</li>
+                        `;
+                        })
+                        .join('')}
+                    </ul>
+                  </li>
+                `;
+                })
+                .join('')}
+            </ul>
+          </div>
+          <div class="item">
+            <h3>
+              <a href="/comics">Comics</a>
+            </h3>
+            <ul>
+              ${comics
+                .map((comic) => {
+                  return `
+                  <li>
+                    ${comic.title} #${comic.issue}
+                  </li>
+                `;
+                })
+                .join('')}
+            </ul>
+          </div>
         </div>
       </body>
     </html>
@@ -87,16 +95,27 @@ app.get('/', async (req, res, next) => {
 });
 
 app.post('/comics', async (req, res, next) => {
-  const newComic = await Comic.create(req.body);
-  const owner = await Owner.findAll({
-    where: {
-      name: req.body.ownerName,
-    },
-  });
-  console.log(owner[0].id);
-  newComic.ownerId = owner[0].id;
-  newComic.save();
-  res.redirect('/');
+  try {
+    const newComic = await Comic.create(req.body);
+    const owner = await Owner.findAll({
+      where: {
+        name: req.body.ownerName,
+      },
+    });
+    if (owner.length) {
+      newComic.ownerId = owner[0].id;
+      newComic.save();
+      res.redirect('/');
+    } else {
+      const newOwner = await Owner.create({ name: req.body.ownerName });
+      console.log(newOwner);
+      newComic.ownerId = newOwner.id;
+      newComic.save();
+      res.redirect('/');
+    }
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.delete('/comics', async (req, res, next) => {
@@ -114,9 +133,13 @@ app.get('/comics', async (req, res, next) => {
     const html = `
       <html>
         <head>
+          <link href="./assets/styles.css" rel="stylesheet">
         <head>
         <body>
-          <h1>Comics</h1>
+          <h1>
+            <a href="/"><<</a>
+          </h1>
+          <h3>Comics</h3>
             <ul>
               ${comics
                 .map((comic) => {
@@ -153,9 +176,13 @@ app.get('/owners', async (req, res, next) => {
     const html = `
       <html>
         <head>
+          <link href="./assets/styles.css" rel="stylesheet">
         <head>
         <body>
-          <h1>Owners</h1>
+          <h1>
+            <a href="/"><<</a>
+          </h1>
+          <h3>Owners</h3>
             <ul>
               ${owners
                 .map((owner) => {

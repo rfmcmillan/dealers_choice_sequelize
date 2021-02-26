@@ -1,0 +1,42 @@
+body {
+  font-family: Comic Sans MS;
+  font-style: italic;
+  background-color: powderblue;
+}
+
+h1 {
+  color: blue;
+}
+
+h3 {
+  color: red;
+}
+
+a {
+  color: blue;
+}
+
+#container {
+  display: flex;
+  flex-direction: row;
+  align-items: top;
+  justify-content: space-between;
+}
+
+#container-form {
+  width: 500px;
+  clear: both;
+}
+
+#container-form input {
+  width: 100%;
+  clear: both;
+}
+
+.item {
+  flex: 1;
+  border: 1px solid black;
+  border-radius: 0.4rem;
+  margin: 0.5rem;
+  background-color: rgb(189, 225, 230);
+}
