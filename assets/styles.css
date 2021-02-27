@@ -1,19 +1,20 @@
 body {
   font-family: Comic Sans MS;
   font-style: italic;
-  background-color: powderblue;
+  background-color: rgb(58, 193, 98);
+  color: white;
 }
 
 h1 {
-  color: blue;
+  color: white;
 }
 
 h3 {
-  color: red;
+  color: white;
 }
 
 a {
-  color: blue;
+  color: white;
 }
 
 #container {
@@ -21,22 +22,21 @@ a {
   flex-direction: row;
   align-items: top;
   justify-content: space-between;
+  margin: 1rem;
 }
 
 #container-form {
-  width: 500px;
   clear: both;
-}
-
-#container-form input {
-  width: 100%;
-  clear: both;
+  display: flex;
+  flex-direction: column;
 }
 
 .item {
   flex: 1;
-  border: 1px solid black;
+  border: 1px solid white;
   border-radius: 0.4rem;
   margin: 0.5rem;
-  background-color: rgb(189, 225, 230);
+  background-color: rgb(101, 187, 127);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }

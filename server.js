@@ -26,26 +26,26 @@ app.get('/', async (req, res, next) => {
       <link href="./assets/styles.css" rel="stylesheet">
       </head>
       <body>
-        <h1>Russel's Comic Database</h1>
+        <h1>COMIC DATABASE</h1>
         <div id="container">
           <div class="item">
-            <h3>Enter a New Comic Here</h3>
+            <h3>ENTER A NEW COMIC HERE</h3>
             <form id="container-form" method="POST" action="/comics">
-              <label>Title:</label>
+              <label>TITLE:</label>
               <input name="title"></input>
               <br>
-              <label>Issue #:</label>
+              <label>ISSUE #:</label>
               <input type="number" name="issue"></input>
               <br>
-              <label>Owner:</label>
-              <input name="ownerName"></input>
+              <label>OWNER:</label>
+              <input name="ownerName" placeholder="Enter New or Existing Owner Name"></input>
               <br>
               <button>Submit</button>
             </form>
           </div>
           <div class="item">
             <h3>
-              <a href="/owners">Owners</a>
+              <a href="/owners">OWNERS</a>
             </h3>
             <ul>
               ${owners
@@ -70,7 +70,7 @@ app.get('/', async (req, res, next) => {
           </div>
           <div class="item">
             <h3>
-              <a href="/comics">Comics</a>
+              <a href="/comics">COMICS</a>
             </h3>
             <ul>
               ${comics
@@ -139,7 +139,7 @@ app.get('/comics', async (req, res, next) => {
           <h1>
             <a href="/"><<</a>
           </h1>
-          <h3>Comics</h3>
+          <h3>COMICS</h3>
             <ul>
               ${comics
                 .map((comic) => {
@@ -149,6 +149,10 @@ app.get('/comics', async (req, res, next) => {
                               - Owner: ${
                                 !!comic.owner ? comic.owner.name : 'none'
                               }
+                            <br>
+                              - Writer: ${!!comic.writer ? comic.writer : ''}
+                            <br>
+                              - Artist: ${!!comic.artist ? comic.artist : ''}
                             <form method="POST" action="/comics/?_method=DELETE">
                               <button name="comicId" value="${
                                 comic.id
@@ -182,7 +186,7 @@ app.get('/owners', async (req, res, next) => {
           <h1>
             <a href="/"><<</a>
           </h1>
-          <h3>Owners</h3>
+          <h3>OWNERS</h3>
             <ul>
               ${owners
                 .map((owner) => {

@@ -39,14 +39,33 @@ Sale.belongsTo(Owner, { as: 'buyer' });
 
 const syncAndSeed = async () => {
   await db.sync({ force: true });
-  const spiderman = await Comic.create({ title: 'Spiderman', issue: 25 });
-  const batman = await Comic.create({ title: 'Batman', issue: 10 });
+  const spiderman = await Comic.create({
+    title: 'Spiderman',
+    issue: 25,
+    writer: 'Stan Lee',
+    artist: 'Steve Ditko',
+  });
+  const batman = await Comic.create({
+    title: 'Detective Comics',
+    issue: 27,
+    writer: 'Bob Kane/Bill Finger',
+    artist: 'Bob Kane',
+  });
+  const spawn = await Comic.create({
+    title: 'Spawn',
+    issue: 10,
+    writer: 'Todd McFarlane',
+    artist: 'Todd McFarlane',
+  });
   const eric = await Owner.create({ name: 'Eric' });
   const andrew = await Owner.create({ name: 'Andrew' });
+  const sarah = await Owner.create({ name: 'Sarah' });
   spiderman.ownerId = eric.id;
   batman.ownerId = andrew.id;
+  spawn.ownerId = sarah.id;
   await spiderman.save();
   await batman.save();
+  await spawn.save();
   const sale1 = Sale.create({ comicId: 1, sellerId: 1, buyerId: 2 });
   const sale2 = Sale.create({ comicId: 2, sellerId: 2, buyerId: 1 });
   spiderman.ownerId = andrew.id;
